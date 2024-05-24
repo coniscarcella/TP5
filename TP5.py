@@ -15,6 +15,12 @@ e) Expulsar alumnos
 """
 
 def agregar_alumnos (codigo, nombre, apellido, fecha_nacimiento, dni, tutor):
+    
+    try:
+        dni = int(dni)
+    except ValueError:
+        return ValueError("El DNI ingresado no es un numero valido")
+    
     alumno = {
         "Nombre": nombre,
         "Apellido":apellido,
@@ -26,17 +32,28 @@ def agregar_alumnos (codigo, nombre, apellido, fecha_nacimiento, dni, tutor):
         "Amonestaciones": 0
     }
     codigo[dni] = alumno
+    print("El alumno fue agregado a la base de datos")
     
       
 def mostrar_datos_alumnos (codigo,dni):
+    try:
+        dni =int(dni)
+    except ValueError:
+        print("El numero ingresado no es valido")
+        return
     if dni in codigo:
         print (f"Los datos del alumno con dni", dni, "son :")
         for clave,valor in codigo[dni].items():
-            print(clave , " :", valor)
+            print(clave + " :", valor)
     else:
         print("El alumno no se encontro en la base de datos")
 
 def modificar_datos_alumnos (codigo,dni):
+    try:
+        dni = int(dni)
+    except ValueError:
+        print("El numero ingresado no es valido")
+        return
     if dni in codigo:
         print(f"Elija el campo que desea modificar: ")
         print("A - Nombre")
@@ -55,10 +72,16 @@ def modificar_datos_alumnos (codigo,dni):
         elif opcion == "D":
             codigo[dni]["Tutor"]=nuevo_dato
         else:
-            print("No se encontro el alumno")
-              
+            print("Opcion no valida")
+    else:
+        print("El alumno no se encontro en la base de datos")        
 
 def agregar_notas (codigo,dni,nota):
+    try:
+        dni=int(dni)
+    except ValueError:
+        print("El numero ingresado no es valido")
+        return
     if dni in codigo:
         codigo[dni]["Notas"].append(nota)
     else:
@@ -101,33 +124,38 @@ base_datos_alumnos ={}
 while True:
     menu()
     opcion = input("Ingrese el numero de la opcion deseada: ")
-    if opcion =="1":
-        dni = input("Ingrese el DNI del alumno: ")
-        mostrar_datos_alumnos(base_datos_alumnos,dni)
+    
+    try:
+        if opcion =="1":
+            dni = input("Ingrese el DNI del alumno: ")
+            mostrar_datos_alumnos(base_datos_alumnos,dni)
         
-    elif opcion =="2":
-        dni = input("Ingrese el DNI del alumno: ")
-        modificar_datos_alumnos(base_datos_alumnos,dni)
-    elif opcion == "3":
-        nombre = input("Ingrese el nombre del alumno: ")
-        apellido = input("Ingrese el apellido del alumno: ")
-        fecha_nacimiento = input("Ingrese la fecha de nacimiento: ")
-        dni = input("Ingrese el DNI: ")
-        tutor =input ("Ingrese el nommbre del tutor: ")
-        agregar_alumnos(base_datos_alumnos,nombre,apellido,fecha_nacimiento,dni,tutor)
-    elif opcion == "4":
-         dni = input("Ingrese el DNI del alumno que sea remover: ")
-         remover_alumnos(base_datos_alumnos,dni)
-    elif opcion =="5":
-        dni = input("Ingrese el DNI del alumno: ")
-        nota = int(input("Ingrese la nota a agregar: "))
-        agregar_notas(base_datos_alumnos,dni,nota)
-    elif opcion =="6":
-        dni = input("Ingrese el DNI del alumno: ")
-        agregar_faltas(base_datos_alumnos,dni)
-    elif opcion == "7":
-        dni = input("Ingrese el DNI del alumno: ")
-        agregar_amonestaciones(base_datos_alumnos,dni)
-    else:
-        print("Hasta luego")
+        elif opcion =="2":
+            dni = input("Ingrese el DNI del alumno: ")
+            modificar_datos_alumnos(base_datos_alumnos,dni)
+        elif opcion == "3":
+            nombre = input("Ingrese el nombre del alumno: ")
+            apellido = input("Ingrese el apellido del alumno: ")
+            fecha_nacimiento = input("Ingrese la fecha de nacimiento: ")
+            dni =  int(input("Ingrese el DNI del alumno: "))
+            tutor =input ("Ingrese el nommbre del tutor: ")
+            agregar_alumnos(base_datos_alumnos,nombre,apellido,fecha_nacimiento,dni,tutor)
+        elif opcion == "4":
+            dni = input("Ingrese el DNI del alumno que sea remover: ")
+            remover_alumnos(base_datos_alumnos,dni)
+        elif opcion =="5":
+            dni = input("Ingrese el DNI del alumno: ")
+            nota = int(input("Ingrese la nota a agregar: "))
+            agregar_notas(base_datos_alumnos,dni,nota)
+        elif opcion =="6":
+            dni = input("Ingrese el DNI del alumno: ")
+            agregar_faltas(base_datos_alumnos,dni)
+        elif opcion == "7":
+            dni = input("Ingrese el DNI del alumno: ")
+            agregar_amonestaciones(base_datos_alumnos,dni)
+        else:
+            print("Hasta luego")
         break
+    except  ValueError:
+        print("El dni debe ser un numero entero")
+        
